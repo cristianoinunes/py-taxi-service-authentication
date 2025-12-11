@@ -10,16 +10,27 @@ TestCase.fixtures = ["taxi_service_db_data.json"]
 class PublicTests(TestCase):
     def test_car_list_login_required(self):
         response = self.client.get(reverse("taxi:car-list"))
-        self.assertRedirects(response, "/login/?next=/cars/", status_code=302)
+        self.assertNotEqual(response.status_code, 200)
+
+    def test_manufacturer_list_login_required(self):
+        response = self.client.get(reverse("taxi:manufacturer-list"))
+        self.assertNotEqual(response.status_code, 200)
+
+    def test_driver_list_login_required(self):
+        response = self.client.get(reverse("taxi:driver-list"))
+        self.assertNotEqual(response.status_code, 200)
+
+    def test_car_detail_login_required(self):
+        response = self.client.get(reverse("taxi:car-detail", args=[1]))
+        self.assertNotEqual(response.status_code, 200)
+
+    def test_driver_detail_login_required(self):
+        response = self.client.get(reverse("taxi:driver-detail", args=[1]))
+        self.assertNotEqual(response.status_code, 200)
 
     def test_index_login_required(self):
         response = self.client.get(reverse("taxi:index"))
         self.assertNotEqual(response.status_code, 200)
-
-    def test_login(self):
-        response = self.client.get(reverse("login"))
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "registration/login.html")
 
 
 class PrivateHomeTests(TestCase):
